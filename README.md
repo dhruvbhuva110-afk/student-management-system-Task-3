@@ -27,19 +27,28 @@ A professional, mobile-friendly student management system with Bootstrap 5 integ
 - **Session Management** - Secure authentication with PHP sessions
 
 ### Student Management
-- **CRUD Operations** - Full Create, Read, Update, Delete functionality
+### User Experience Enhancements
+- **Login Transition Page** - "Authenticated!" intermediate screen with loading animation
+- **Role-Based Directives** - Smart dashboard banners indicating user permissions
+- **Toast Notifications** - Real-time feedback for all actions
+- **Loading States** - Button spinners and table skeleton loaders
+
+### Student Management & Permissions
+- **Admin Privileges** - Full control: Create, Read, Update, Delete, Import, Export
+- **User Permissions** - Restricted access: Add and Import Students only (Cannot Edit/Delete)
+- **Bulk Operations** - Logic for CSV and PDF bulk imports
+- **Secure Export** - PDF and CSV export functionality
 - **Auto-Generated Student IDs** - Automated `STD001`, `STD002`... sequence
 - **Sequential ID Reordering** - Automatic gap filling upon student deletion
 - **Search Functionality** - Real-time global search
 - **Course Filtering** - Instant filtering by department/course
-- **Responsive Tables** - Optimized layout for mobile
-- **Read-Only ID Management** - Prevents manual Student ID errors
 
 ### Authentication
 - **Secure Login** - Email and password authentication
-- **User Registration** - New user account creation
-- **Session Management** - Persistent login sessions
-- **Protected Routes** - Auth-required pages
+- **Rich Transition** - Smooth login flow with `redirect.html`
+- **User Registration** - New user account creation with First/Last name support
+- **Session Management** - Persistent login sessions with role tracking
+- **Protected Routes** - Auth-required pages and Admin-only sections
 
 ## 🛠️ Technology Stack
 
@@ -113,29 +122,33 @@ A professional, mobile-friendly student management system with Bootstrap 5 integ
 ```
 student-management-system-dashboard/
 ├── index.html              # Main dashboard
-├── login.html             # Login page
-├── register.html          # Registration page
+├── students.html           # Student management
+├── redirect.html           # Login transition page
+├── login.html              # Login page
+├── register.html           # Registration page
+├── activity-logs.html      # Admin activity logs
+├── users.html              # Admin user management
 ├── css/
-│   └── styles.css        # Custom styles (755 lines)
+│   └── styles.css          # Custom styles
 ├── js/
-│   ├── app.js            # Main application logic
-│   ├── auth.js           # Authentication handling
-│   ├── charts.js         # Chart initialization
-│   └── dashboard.js      # Dashboard utilities
+│   ├── app.js              # Main application logic
+│   ├── auth.js             # Authentication handling
+│   ├── log_activity.js     # Activity log logic
+│   ├── users.js            # User management logic
+│   └── ...
 ├── api/
-│   ├── auth_helper.php   # Auth utilities
-│   ├── check_auth.php    # Session verification
-│   ├── create.php        # Create student
-│   ├── delete.php        # Delete student
-│   ├── login.php         # User login
-│   ├── logout.php        # User logout
-│   ├── read.php          # Read students
-│   ├── register.php      # User registration
-│   └── update.php        # Update student
+│   ├── auth_helper.php     # Auth & Permission utilities
+│   ├── log_activity.php    # Logger class
+│   ├── create.php          # Create student (All Users)
+│   ├── update.php          # Update student (Admin Only)
+│   ├── delete.php          # Delete student (Admin Only)
+│   ├── bulk_import_*.php   # Import handlers
+│   └── ...
 ├── config/
-│   └── database.php      # Database configuration
+│   └── database.php        # Database configuration
 └── database/
-    └── schema.sql        # Database schema
+    ├── schema.sql          # Database schema
+    └── activity_logs.sql   # Activity logs schema
 ```
 
 ## 🎨 UI Features
@@ -155,14 +168,31 @@ student-management-system-dashboard/
 - Custom scrollbar
 - Shadow elevations
 
-## 🔒 Security Features
+## 🔒 Security & Permissions
 
-- Password hashing with `password_hash()`
-- SQL injection prevention with PDO prepared statements
-- XSS protection with HTML escaping
-- CSRF token support (ready for implementation)
-- Session-based authentication
-- Secure logout
+### Role-Based Access Control (RBAC)
+| Feature | Admin | User |
+|---------|-------|------|
+| View Students | ✅ Yes | ✅ Yes |
+| Add Student | ✅ Yes | ✅ Yes |
+| Import (CSV/PDF) | ✅ Yes | ✅ Yes |
+| Export (CSV/PDF) | ✅ Yes | ✅ Yes |
+| Edit Student | ✅ Yes | ❌ No |
+| Delete Student | ✅ Yes | ❌ No |
+| View Activity Logs | ✅ Yes | ❌ No |
+| Manage Users | ✅ Yes | ❌ No |
+
+### Activity Logging
+- **Login/Logout Tracking** - Logs timestamp, IP, and User Agent
+- **CRUD Logging** - Records Creation, Updates, and Deletions
+- **Bulk Operations** - Tracks import events
+- **Super Admin Visibility** - Full audit trail accessible to Admins
+
+### Technical Security
+- **Password Hashing** - Secure `password_hash()` implementation
+- **SQL Injection Prevention** - PDO prepared statements everywhere
+- **XSS Protection** - Global HTML escaping function
+- **Session Security** - Role and status verification on every request
 
 ## 📊 API Endpoints
 
